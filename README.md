@@ -59,6 +59,7 @@ HemoPulse/
 ├── database/
 │   └── schema.sql           # Database initialization script
 └── README.md
+```
 
 ## 🚀 Local Setup & Installation
 

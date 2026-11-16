@@ -32,10 +32,12 @@ Real-time data visualization showing total donors, lives saved, inventory distri
 
 ## 🛠️ Tech Stack
 
-*   **Frontend:** React.js (Vite), Recharts (Data Visualization), Lucide-React (Icons), QRCode.react
-*   **Backend:** Python Flask (RESTful APIs)
-*   **Database:** MySQL / MariaDB
-*   **Tools:** Git, GitHub, Postman, Figma
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React.js (Vite), Recharts, Lucide-React, QRCode.react |
+| **Backend** | Python Flask (RESTful APIs) |
+| **Database** | SQLite (zero-config, file-based) |
+| **Tools** | Git, GitHub, Postman |
 
 ---
 
@@ -66,16 +68,19 @@ HemoPulse/
 ### Prerequisites
 - Node.js (v16+)
 - Python (v3.10+)
-- MySQL Server
+- ⚠️ **No MySQL required!** HemoPulse uses SQLite, which is built into Python.
 
 ### 1. Database Setup
-1. Open MySQL Workbench or your MySQL CLI.
-2. Run the SQL script located in `database/schema.sql` to create the `hemopulse_db` database and all required tables.
-
-### 2. Backend Setup (Flask)
-Open your terminal and navigate to the backend folder:
+Open your terminal, navigate to the backend folder, and run this single command to generate the database and tables automatically:
 
     cd backend
+    python init_db.py
+
+*(This creates a local `hemopulse.db` file with sample data. No database server needed!)*
+
+### 2. Backend Setup (Flask)
+Still in the `backend` folder, set up your virtual environment and start the server:
+
     python -m venv venv
 
     # For Windows:
@@ -84,13 +89,7 @@ Open your terminal and navigate to the backend folder:
     # For Mac/Linux:
     source venv/bin/activate
 
-    # Install dependencies:
     pip install -r requirements.txt
-
-> ⚠️ Important: Open `backend/config.py` and update the `password` field with your actual local MySQL password.
-
-Then, start the backend server:
-
     python run.py
 
 *(The server will start on http://127.0.0.1:5000)*

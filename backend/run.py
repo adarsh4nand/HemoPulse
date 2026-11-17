@@ -1,15 +1,14 @@
-from flask import Flask
 from flask_cors import CORS
+from app import create_app
 
-def create_app():
-    app = Flask(__name__)
-    
-    # Allow your Vercel frontend (and localhost for local testing)
-    CORS(app, origins=[
-        "https://vercel.app",
-        "http://localhost:5000",
-        "http://localhost:5173"
-    ])
-    
-    # Register your blueprints/routes here
-    return app
+app = create_app()
+
+# Allow requests from your Vercel frontend and local development servers
+CORS(app, origins=[
+    "https://vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173"
+])
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

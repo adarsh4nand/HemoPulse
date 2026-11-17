@@ -4,6 +4,56 @@ from .database import get_db_connection
 
 main_routes = Blueprint('main_routes', __name__)
 
+# --- User Registration ---
+@main_routes.route('/api/register_user', methods=['POST'])
+def register_user():
+    data = request.json
+    full_name = data.get('full_name')
+    email = data.get('email')
+    password = data.get('password')
+    if not all([full_name, email, password]):
+        return jsonify({"error": "All fields are required"}), 400
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM Users WHERE email = ?", (email,))
+        if cursor.fetchone():
+            return jsonify({"error": "Email already registered"}), 409
+        from werkzeug.security import generate_password_hash
+        password_hash = generate_password_hash(password)
+        cursor.execute("INSERT INTO Users (full_name, email, password_hash) VALUES (?, ?, ?)",
+                       (full_name, email, password_hash))
+        conn.commit()
+        return jsonify({"status": "success", "user": {"full_name": full_name, "email": email, "role": "staff"}}), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
+
+# --- User Login ---
+@main_routes.route('/api/login', methods=['POST'])
+def login_user():
+    data = request.json
+    email = data.get('email')
+    password = data.get('password')
+    if not all([email, password]):
+        return jsonify({"error": "Email and password are required"}), 400
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT * FROM Users WHERE email = ?", (email,))
+        user = cursor.fetchone()
+        if not user:
+            return jsonify({"error": "Invalid email or password"}), 401
+        from werkzeug.security import check_password_hash
+        if not check_password_hash(user['password_hash'], password):
+            return jsonify({"error": "Invalid email or password"}), 401
+        return jsonify({"status": "success", "user": {"full_name": user['full_name'], "email": user['email'], "role": user['role']}}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    finally:
+        conn.close()
+
 # Helper to convert sqlite3.Row to dict
 def row_to_dict(row):
     return dict(row) if row else None

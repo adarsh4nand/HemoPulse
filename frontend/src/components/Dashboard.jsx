@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts'
 import { Users, Droplet, Heart, AlertTriangle, Calendar, Activity, TrendingUp } from 'lucide-react'
 
+const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000'
 const COLORS = ['#dc2626', '#2563eb', '#16a34a', '#ca8a04', '#9333ea', '#0891b2', '#ea580c', '#475569']
 
 function Dashboard() {
@@ -10,9 +11,9 @@ function Dashboard() {
 
   useEffect(() => {
     // Fetch Stats
-    fetch('http://127.0.0.1:5000/api/stats').then(res => res.json()).then(setStats).catch(err => console.error(err))
+    fetch(`${API}/api/stats`).then(res => res.json()).then(setStats).catch(err => console.error(err))
     // Fetch Activity
-    fetch('http://127.0.0.1:5000/api/recent_activity').then(res => res.json()).then(setActivity).catch(err => console.error(err))
+    fetch(`${API}/api/recent_activity`).then(res => res.json()).then(setActivity).catch(err => console.error(err))
   }, [])
 
   // Mock data for Bar Chart (Donations by Blood Group)

@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 
+const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000'
+
 function Chatbot() {
   const [messages, setMessages] = useState([
     { sender: 'bot', text: 'Hello! I am the HemoPulse AI Assistant. How can I help you today?' }
@@ -34,7 +36,7 @@ function Chatbot() {
     setLoading(true)
 
     try {
-      const res = await fetch('http://127.0.0.1:5000/api/chat', {
+      const res = await fetch(`${API}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: messageText })

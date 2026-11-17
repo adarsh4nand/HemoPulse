@@ -1,5 +1,5 @@
 import { useState } from 'react'
-const API = 'http://127.0.0.1:5000'
+const API = import.meta.env.VITE_API_URL || 'http://127.0.0.1:5000'
 
 function DonorForm() {
   const [form, setForm] = useState({ full_name: '', phone: '', blood_group: 'O+', last_donation_date: '' })

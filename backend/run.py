@@ -1,14 +1,12 @@
-from flask_cors import CORS
+import os
+from dotenv import load_dotenv
 from app import create_app
+
+load_dotenv()
 
 app = create_app()
 
-# Allow requests from your Vercel frontend and local development servers
-CORS(app, origins=[
-    "https://vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173"
-])
-
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV', 'development') == 'development'
+    app.run(debug=debug, host='0.0.0.0', port=port)
